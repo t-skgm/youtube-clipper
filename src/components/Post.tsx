@@ -2,24 +2,28 @@ import React from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 
-export type PostProps = {
+export type PostItem = {
   id: number;
   title: string;
   author: {
-    name: string;
-    email: string;
+    name: string | null;
+    email: string | null;
   } | null;
-  content: string;
+  content: string | null;
   published: boolean;
 };
 
-const Post: React.FC<{ post: PostProps }> = ({ post }) => {
+export type Props = {
+  post: PostItem;
+};
+
+const Post: React.FC<Props> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
   return (
     <div onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}>
       <h2>{post.title}</h2>
       <small>By {authorName}</small>
-      <ReactMarkdown children={post.content} />
+      <ReactMarkdown children={post.content ?? ""} />
       <style jsx>{`
         div {
           color: inherit;
