@@ -53,6 +53,32 @@ export const appRouter = router({
 
     return { drafts };
   }),
+
+  createDraft: procedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { session } = ctx;
+      if (!session?.user) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const result = await prisma.post.create({
+        data: {
+          title: input.title,
+          content: input.content,
+          author: session.user.email
+            ? { connect: { email: session.user.email } }
+            : undefined,
+        },
+      });
+
+      return { post: result };
+    }),
 });
 
 // export type definition of API

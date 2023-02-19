@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
 import Router from "next/router";
+import { trpc } from "../infrastructure/trpc";
 
 const Draft: React.FC = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const { mutateAsync, isLoading } = trpc.createDraft.useMutation();
+
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const body = { title, content };
-      await fetch(`/api/post`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      await mutateAsync({ title, content });
       await Router.push("/drafts");
     } catch (error) {
       console.error(error);
@@ -40,7 +38,11 @@ const Draft: React.FC = () => {
             rows={8}
             value={content}
           />
-          <input disabled={!content || !title} type="submit" value="Create" />
+          <input
+            disabled={!content || !title || isLoading}
+            type="submit"
+            value="Create"
+          />
           <a className="back" href="#" onClick={() => Router.push("/")}>
             or Cancel
           </a>
