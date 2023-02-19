@@ -7,7 +7,7 @@
   "author": "",
   "scripts": {
     "dev": "next",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "prisma:watch": "prisma generate --watch"
