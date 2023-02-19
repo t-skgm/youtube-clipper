@@ -10,6 +10,7 @@ type Props = {
 
 const Blog: React.FC<Props> = () => {
   const { data, isLoading } = trpc.feed.useQuery();
+  console.log("process.env", process.env);
 
   return (
     <Layout>
