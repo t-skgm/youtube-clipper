@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { procedure, router } from "../trpc";
+import prisma from "../../infrastructure/prisma";
 
 export const appRouter = router({
   hello: procedure
